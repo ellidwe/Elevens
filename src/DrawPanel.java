@@ -48,7 +48,7 @@ class DrawPanel extends JPanel implements MouseListener {
         }
         //drawing button
         g.setFont(new Font("Courier New", Font.BOLD, 20));
-        g.drawString("GET NEW CARDS", 150, 400); //how to sout in jpanel
+        g.drawString("REPLACE CARDS", 150, 400); //how to sout in jpanel
         g.drawString("CARDS LEFT: " + deck.getDeck().size(), 0, 450);
         //draws rectangle border
         g.drawRect((int)button.getX(), (int)button.getY(), (int)button.getWidth(), (int)button.getHeight());
