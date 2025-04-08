@@ -67,8 +67,14 @@ class DrawPanel extends JPanel implements MouseListener {
 
             //if point is inside rect (if button clicked)
             if (button.contains(clicked)) {
+
                 int selectedTotal = 0;
                 ArrayList<Integer> selectedIdxs = new ArrayList<>();
+
+                boolean j = false;
+                boolean q = false;
+                boolean k = false;
+
                 for(int i = 0; i < hand.size(); i++)
                 {
                     if(hand.get(i).getHighlight())
@@ -77,6 +83,18 @@ class DrawPanel extends JPanel implements MouseListener {
                         if(hand.get(i).getValue().equals("A"))
                         {
                             selectedTotal += 1;
+                        }
+                        else if(hand.get(i).getValue().equals("J"))
+                        {
+                            j = true;
+                        }
+                        else if(hand.get(i).getValue().equals("Q"))
+                        {
+                            q = true;
+                        }
+                        else if(hand.get(i).getValue().equals("K"))
+                        {
+                            k = true;
                         }
                         else
                         {
@@ -89,6 +107,20 @@ class DrawPanel extends JPanel implements MouseListener {
                     for(int idx : selectedIdxs)
                     {
                         Card.replaceCard(deck, hand, idx);
+                    }
+                }
+                else if(j && q && k)
+                {
+                    for(int idx : selectedIdxs)
+                    {
+                        Card.replaceCard(deck, hand, idx);
+                    }
+                }
+                else
+                {
+                    for(int idx : selectedIdxs)
+                    {
+                        hand.get(idx).flipHighlight();
                     }
                 }
             }
