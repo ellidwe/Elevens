@@ -14,10 +14,12 @@ class DrawPanel extends JPanel implements MouseListener {
 
     //represents a rectangle
     private Rectangle button;
+    private Rectangle playAgainButton;
 
     public DrawPanel() {
         //get new cards button
         button = new Rectangle(147, 380, 160, 26);
+        playAgainButton = new Rectangle(147, 250, 160, 26);
         this.addMouseListener(this);
         hand = Card.buildHand(deck.getDeck());
     }
@@ -49,22 +51,46 @@ class DrawPanel extends JPanel implements MouseListener {
         //drawing button
         g.setFont(new Font("Courier New", Font.BOLD, 20));
         g.drawString("REPLACE CARDS", 150, 400); //how to sout in jpanel
+        g.drawString("PLAY AGAIN", 167, 270); //how to sout in jpanel
         g.drawString("CARDS LEFT: " + deck.getDeck().size(), 0, 450);
         //draws rectangle border
         g.drawRect((int)button.getX(), (int)button.getY(), (int)button.getWidth(), (int)button.getHeight());
+        g.drawRect((int)playAgainButton.getX(), (int)playAgainButton.getY(), (int)playAgainButton.getWidth(), (int)playAgainButton.getHeight());
     }
 
     public void mousePressed(MouseEvent e) {
 
         Point clicked = e.getPoint();
-        System.out.println(clicked);
 
         //if left click on button
         if (e.getButton() == 1) {
 
             //if point is inside rect (if button clicked)
             if (button.contains(clicked)) {
-                hand = Card.buildHand(deck.getDeck());
+                int selectedTotal = 0;
+                ArrayList<Integer> selectedIdxs = new ArrayList<>();
+                for(int i = 0; i < hand.size(); i++)
+                {
+                    if(hand.get(i).getHighlight())
+                    {
+                        selectedIdxs.add(i);
+                        if(hand.get(i).getValue().equals("A"))
+                        {
+                            selectedTotal += 1;
+                        }
+                        else
+                        {
+                            selectedTotal += Integer.parseInt(hand.get(i).getValue());
+                        }
+                    }
+                }
+                if(selectedTotal == 11)
+                {
+                    for(int idx : selectedIdxs)
+                    {
+                        Card.replaceCard(deck, hand, idx);
+                    }
+                }
             }
 
             //go thru each card
