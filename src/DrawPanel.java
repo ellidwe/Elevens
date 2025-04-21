@@ -11,6 +11,7 @@ class DrawPanel extends JPanel implements MouseListener {
 
     private ArrayList<Card> hand;
     private Deck deck = new Deck();
+    private boolean hasWon;
 
     //represents a rectangle
     private Rectangle button;
@@ -22,6 +23,7 @@ class DrawPanel extends JPanel implements MouseListener {
         playAgainButton = new Rectangle(147, 250, 160, 26);
         this.addMouseListener(this);
         hand = Card.buildHand(deck.getDeck());
+        hasWon = false;
     }
 
     public boolean hasValidMove()
@@ -126,7 +128,13 @@ class DrawPanel extends JPanel implements MouseListener {
         super.paintComponent(g);
         int y = 10;
 
-        if(hasValidMove())
+        if(hasWon)
+        {
+            g.drawString("YOU WIN!!!", 167, 100); //how to sout in jpanel
+            g.drawString("PLAY AGAIN", 167, 270); //how to sout in jpanel
+            g.drawRect((int)playAgainButton.getX(), (int)playAgainButton.getY(), (int)playAgainButton.getWidth(), (int)playAgainButton.getHeight());
+        }
+        else if(hasValidMove())
         {
             for (int i = 0; i < 3; i++) {
                 int x = 125;
@@ -157,6 +165,7 @@ class DrawPanel extends JPanel implements MouseListener {
         }
         else
         {
+            g.drawString("YOU LOSE", 167, 100); //how to sout in jpanel
             g.drawString("PLAY AGAIN", 167, 270); //how to sout in jpanel
             g.drawRect((int)playAgainButton.getX(), (int)playAgainButton.getY(), (int)playAgainButton.getWidth(), (int)playAgainButton.getHeight());
         }
@@ -209,16 +218,30 @@ class DrawPanel extends JPanel implements MouseListener {
                 }
                 if(selectedTotal == 11)
                 {
-                    for(int idx : selectedIdxs)
+                    if(deck.getDeck().size() >= 2)
                     {
-                        Card.replaceCard(deck, hand, idx);
+                        for(int idx : selectedIdxs)
+                        {
+                            Card.replaceCard(deck, hand, idx);
+                        }
+                    }
+                    else
+                    {
+                        hasWon = true;
                     }
                 }
                 else if(j && q && k)
                 {
-                    for(int idx : selectedIdxs)
+                    if(deck.getDeck().size() >= 3)
                     {
-                        Card.replaceCard(deck, hand, idx);
+                        for(int idx : selectedIdxs)
+                        {
+                            Card.replaceCard(deck, hand, idx);
+                        }
+                    }
+                    else
+                    {
+                        hasWon = true;
                     }
                 }
                 else
@@ -233,6 +256,7 @@ class DrawPanel extends JPanel implements MouseListener {
             {
                 deck = new Deck();
                 hand = Card.buildHand(deck.getDeck());
+                hasWon = false;
             }
 
             //go thru each card
