@@ -98,13 +98,18 @@ class DrawPanel extends JPanel implements MouseListener {
                     {
                         sum = Integer.parseInt(card.getValue());
                     }
-                    if(card.getValue().equals("A"))
+
+                    if(card2.getValue().equals("A"))
                     {
                         sum += 1;
                     }
+                    else if(card2.getValue().equals("K") || card2.getValue().equals("Q") || card2.getValue().equals("J"))
+                    {
+
+                    }
                     else
                     {
-                        sum += Integer.parseInt(card.getValue());
+                        sum += Integer.parseInt(card2.getValue());
                     }
 
                     if(sum == 11)
@@ -223,6 +228,11 @@ class DrawPanel extends JPanel implements MouseListener {
                         hand.get(idx).flipHighlight();
                     }
                 }
+            }
+            else if (playAgainButton.contains(clicked))
+            {
+                deck = new Deck();
+                hand = Card.buildHand(deck.getDeck());
             }
 
             //go thru each card
