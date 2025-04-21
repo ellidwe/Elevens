@@ -24,38 +24,138 @@ class DrawPanel extends JPanel implements MouseListener {
         hand = Card.buildHand(deck.getDeck());
     }
 
+    public boolean hasValidMove()
+    {
+        for(Card card: hand)
+        {
+            if(card.getValue().equals("K")) //if card is king
+            {
+                boolean[] jq = new boolean[2];
+                for(Card card2: hand)
+                {
+                    if(card2.getValue().equals("J"))
+                    {
+                        jq[0] = true;
+                    }
+                    else if(card2.getValue().equals("Q"))
+                    {
+                        jq[1] = true;
+                    }
+                }
+                if(jq[0] && jq[1])
+                {
+                    return true;
+                }
+            }
+            else if(card.getValue().equals("Q")) //if card is queen
+            {
+                boolean[] jK = new boolean[2];
+                for(Card card2: hand)
+                {
+                    if(card2.getValue().equals("J"))
+                    {
+                        jK[0] = true;
+                    }
+                    else if(card2.getValue().equals("K"))
+                    {
+                        jK[1] = true;
+                    }
+                }
+                if(jK[0] && jK[1])
+                {
+                    return true;
+                }
+            }
+            else if(card.getValue().equals("J")) //if card is jack
+            {
+                boolean[] qk = new boolean[2];
+                for(Card card2: hand)
+                {
+                    if(card2.getValue().equals("Q"))
+                    {
+                        qk[0] = true;
+                    }
+                    else if(card2.getValue().equals("K"))
+                    {
+                        qk[1] = true;
+                    }
+                }
+                if(qk[0] && qk[1])
+                {
+                    return true;
+                }
+            }
+            else //if card is ace (1) or number
+            {
+                int sum = 0;
+                for(Card card2 : hand)
+                {
+                    if(card.getValue().equals("A"))
+                    {
+                        sum = 1;
+                    }
+                    else
+                    {
+                        sum = Integer.parseInt(card.getValue());
+                    }
+                    if(card.getValue().equals("A"))
+                    {
+                        sum += 1;
+                    }
+                    else
+                    {
+                        sum += Integer.parseInt(card.getValue());
+                    }
+
+                    if(sum == 11)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         int y = 10;
 
-        for (int i = 0; i < 3; i++) {
-            int x = 125;
-            for(int j = 0; j < 3; j++)
-            {
-                Card c = hand.get(i * 3 + j);
+        if(hasValidMove())
+        {
+            for (int i = 0; i < 3; i++) {
+                int x = 125;
+                for(int j = 0; j < 3; j++)
+                {
+                    Card c = hand.get(i * 3 + j);
 
-                //if should be highlighted
-                if (c.getHighlight()) {
-                    //draws border rect around card
-                    g.drawRect(x, y, c.getImage().getWidth(), c.getImage().getHeight());
+                    //if should be highlighted
+                    if (c.getHighlight()) {
+                        //draws border rect around card
+                        g.drawRect(x, y, c.getImage().getWidth(), c.getImage().getHeight());
+                    }
+
+                    //establish location of rectangle "hitbox"
+                    c.setRectangleLocation(x, y);
+                    g.drawImage(c.getImage(), x, y, null);
+
+                    x = x + c.getImage().getWidth() + 10;
                 }
-
-                //establish location of rectangle "hitbox"
-                c.setRectangleLocation(x, y);
-                g.drawImage(c.getImage(), x, y, null);
-
-                x = x + c.getImage().getWidth() + 10;
+                y += 80;
             }
-            y += 80;
+            //drawing button
+            g.setFont(new Font("Courier New", Font.BOLD, 20));
+            g.drawString("REPLACE CARDS", 150, 400); //how to sout in jpanel
+            g.drawString("CARDS LEFT: " + deck.getDeck().size(), 0, 450);
+            //draws rectangle border
+            g.drawRect((int)button.getX(), (int)button.getY(), (int)button.getWidth(), (int)button.getHeight());
         }
-        //drawing button
-        g.setFont(new Font("Courier New", Font.BOLD, 20));
-        g.drawString("REPLACE CARDS", 150, 400); //how to sout in jpanel
-        g.drawString("PLAY AGAIN", 167, 270); //how to sout in jpanel
-        g.drawString("CARDS LEFT: " + deck.getDeck().size(), 0, 450);
-        //draws rectangle border
-        g.drawRect((int)button.getX(), (int)button.getY(), (int)button.getWidth(), (int)button.getHeight());
-        g.drawRect((int)playAgainButton.getX(), (int)playAgainButton.getY(), (int)playAgainButton.getWidth(), (int)playAgainButton.getHeight());
+        else
+        {
+            g.drawString("PLAY AGAIN", 167, 270); //how to sout in jpanel
+            g.drawRect((int)playAgainButton.getX(), (int)playAgainButton.getY(), (int)playAgainButton.getWidth(), (int)playAgainButton.getHeight());
+        }
+
     }
 
     public void mousePressed(MouseEvent e) {
